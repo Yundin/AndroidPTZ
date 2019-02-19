@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements OnvifListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        currentDevice = new OnvifDevice("IP_ADDRESS:PORT", "login", "pwd");
+        currentDevice = new OnvifDevice("192.168.15.43:80", "student", "student");
         currentDevice.setListener(this);
         currentDevice.getServices();
     }
