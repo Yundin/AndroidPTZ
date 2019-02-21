@@ -1,28 +1,18 @@
 package com.yundin.androidptz;
 
-import androidx.appcompat.app.AppCompatActivity;
-import be.teletask.onvif.DiscoveryManager;
-import be.teletask.onvif.OnvifManager;
-import be.teletask.onvif.listeners.DiscoveryListener;
-import be.teletask.onvif.listeners.OnvifMediaProfilesListener;
-import be.teletask.onvif.listeners.OnvifMediaStreamURIListener;
-import be.teletask.onvif.listeners.OnvifResponseListener;
-import be.teletask.onvif.listeners.OnvifServicesListener;
-import be.teletask.onvif.models.Device;
-import be.teletask.onvif.models.OnvifDevice;
-import be.teletask.onvif.models.OnvifMediaProfile;
-import be.teletask.onvif.models.OnvifServices;
-import be.teletask.onvif.responses.OnvifResponse;
-import io.github.controlwear.virtual.joystick.android.JoystickView;
-
 import android.os.Bundle;
-import android.util.Log;
 
 import com.yundin.androidptz.model.ContinuousMoveRequest;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import be.teletask.onvif.OnvifManager;
+import be.teletask.onvif.listeners.OnvifResponseListener;
+import be.teletask.onvif.models.OnvifDevice;
+import be.teletask.onvif.responses.OnvifResponse;
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+
 
 public class MainActivity extends AppCompatActivity {
 
