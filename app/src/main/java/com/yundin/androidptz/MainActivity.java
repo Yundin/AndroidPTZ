@@ -1,21 +1,28 @@
 package com.yundin.androidptz;
 
 import androidx.appcompat.app.AppCompatActivity;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import be.teletask.onvif.DiscoveryManager;
+import be.teletask.onvif.OnvifManager;
+import be.teletask.onvif.listeners.DiscoveryListener;
+import be.teletask.onvif.listeners.OnvifMediaProfilesListener;
+import be.teletask.onvif.listeners.OnvifMediaStreamURIListener;
+import be.teletask.onvif.listeners.OnvifResponseListener;
+import be.teletask.onvif.listeners.OnvifServicesListener;
+import be.teletask.onvif.models.Device;
+import be.teletask.onvif.models.OnvifDevice;
+import be.teletask.onvif.models.OnvifMediaProfile;
+import be.teletask.onvif.models.OnvifServices;
+import be.teletask.onvif.responses.OnvifResponse;
+import io.github.controlwear.virtual.joystick.android.JoystickView;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 
-import com.jackandphantom.joystickview.JoyStickView;
-import com.rvirin.onvif.onvifcamera.OnvifDigestInformation;
+import com.yundin.androidptz.model.ContinuousMoveRequest;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,15 +31,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        JoyStickView v = findViewById(R.id.joystick);
-        v.setOnMoveListener(new JoyStickView.OnMoveListener() {
+        OnvifManager onvifManager = new OnvifManager();
+        onvifManager.setOnvifResponseListener(new OnvifResponseListener() {
             @Override
-            public void onMove(double angle, float strength) {
-                int i =  42;
+            public void onResponse(@NotNull OnvifDevice onvifDevice, @NotNull OnvifResponse response) {
+                int i = 42;
+            }
+
+            @Override
+            public void onError(@NotNull OnvifDevice onvifDevice, int errorCode, String errorMessage) {
+                int i = 42;
             }
         });
+        OnvifDevice device = new OnvifDevice("192.168.15.43");
+        device.setUsername("vladislavyundin");
+        device.setPassword("MSQBdvrTOtZhWDNw");
 
-        OnvifDigestInformation di = new OnvifDigestInformation("vladislavyundin", "MSQBdvrTOtZhWDNw", "/onvif/device_service", "Digest qop=\"auth\", realm=\"DS-2DC2204IW-DE3/W\", nonce=\"4d6b52424e7a597a4d5551364d54426a4e7a55344e6a633d\"");
-        String ah = di.getAuthorizationHeader();
+        JoystickView v = findViewById(R.id.joystick);
+        v.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                float x = (float) Math.cos(Math.toRadians(angle)) * strength / 100f;
+                float y = (float) Math.sin(Math.toRadians(angle)) * strength / 100f;
+                onvifManager.sendOnvifRequest(device, new ContinuousMoveRequest(x, y, 0));
+            }
+        }, 500);
     }
 }
