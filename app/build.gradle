@@ -40,6 +40,7 @@ dependencies {
 
     // okhttp
     implementation "com.squareup.okhttp3:okhttp:3.12.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     // joystick
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
