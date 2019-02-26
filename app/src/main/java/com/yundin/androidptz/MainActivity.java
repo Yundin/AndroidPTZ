@@ -1,6 +1,10 @@
 package com.yundin.androidptz;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -31,12 +35,35 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        final StartPointSeekBar seekBar = (StartPointSeekBar) findViewById(R.id.seek_bar);
+        seekBar.setOnSeekBarChangeListener(new StartPointSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onOnSeekBarValueChange(StartPointSeekBar bar, double value) {
+                Log.d("LOGTA1", "seekbar value:" + value);
+            }
+        });
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    seekBar.setProgress(0);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 
         OnvifManager onvifManager = new OnvifManager();
         onvifManager.setOnvifResponseListener(new OnvifResponseListener() {
