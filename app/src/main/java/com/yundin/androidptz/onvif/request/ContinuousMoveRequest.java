@@ -1,8 +1,7 @@
-package com.yundin.androidptz.model;
+package com.yundin.androidptz.onvif.request;
 
 
 import be.teletask.onvif.models.OnvifType;
-import be.teletask.onvif.requests.OnvifRequest;
 
 public final class ContinuousMoveRequest implements OnvifRequest {
 
