@@ -32,7 +32,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     public void onBindViewHolder(@NonNull DeviceListViewHolder holder, int position) {
         SpOnvifDevice item = data.get(position);
 
-        holder.name.setText(item.address);
+        holder.name.setText(item.name);
         holder.address.setText(item.address);
 
         holder.itemView.setOnClickListener(v -> listener.onClick(item));

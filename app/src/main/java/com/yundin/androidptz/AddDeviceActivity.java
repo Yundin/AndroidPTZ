@@ -24,6 +24,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
 
+        EditText nameEditText = findViewById(R.id.name);
         EditText addressEditText = findViewById(R.id.address);
         EditText loginEditText = findViewById(R.id.login);
         EditText passwordEditText = findViewById(R.id.password);
@@ -46,25 +47,26 @@ public class AddDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String login = loginEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+                String name = nameEditText.getText().toString();
                 String address = addressEditText.getText().toString();
 
-                saveData(login, password, address);
+                saveData(login, password, name, address);
 
                 finish();
             }
         });
     }
 
-    private void saveData(String login, String password, String address){
+    private void saveData(String login, String password, String name, String address){
         SharedPreferences sp = getSharedPreferences("deviceData", MODE_PRIVATE);
         SharedPreferences.Editor spEditor = sp.edit();
 
         List<SpOnvifDevice> deviceList = getDevicesFromSP(sp);
         if(!deviceList.isEmpty()){
-            deviceList.add(new SpOnvifDevice(login, password, address));
+            deviceList.add(new SpOnvifDevice(login, password, name, address));
             setDevicesToSp(spEditor, deviceList);
         }else{
-            deviceList.add(new SpOnvifDevice(login, password, address));
+            deviceList.add(new SpOnvifDevice(login, password, name, address));
             setDevicesToSp(spEditor, deviceList);
         }
     }
