@@ -4,6 +4,16 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
+
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'ptz'
+            keyPassword 'MdAHao'
+            storeFile file('../signing/TagunYundin')
+            storePassword 'MdAHao'
+        }
+    }
+
     defaultConfig {
         applicationId "com.yundin.androidptz"
         minSdkVersion 21
@@ -16,6 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
         }
     }
     compileOptions {
@@ -33,9 +44,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-
-    // onvif
-    implementation 'be.teletask.onvif:onvif:1.0.2'
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
