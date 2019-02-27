@@ -2,10 +2,12 @@ package com.yundin.androidptz.device;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.yundin.androidptz.R;
 import com.yundin.androidptz.model.SpOnvifDevice;
 import com.yundin.androidptz.onvif.DevicePreset;
@@ -25,6 +27,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.controlwear.virtual.joystick.android.JoystickView;

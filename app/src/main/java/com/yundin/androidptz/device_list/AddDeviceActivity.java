@@ -72,7 +72,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 
     private List<SpOnvifDevice> getDevicesFromSP(SharedPreferences sp){
         String devices = sp.getString("devices", "");
-        if(devices.equals("")) return new ArrayList<SpOnvifDevice>();;
+        if(devices.equals("")) return new ArrayList<SpOnvifDevice>();
         Gson gson = new Gson();
         SpOnvifDevice deviceArray[] = gson.fromJson(devices, SpOnvifDevice[].class);
         return new ArrayList<SpOnvifDevice>(Arrays.asList(deviceArray));
