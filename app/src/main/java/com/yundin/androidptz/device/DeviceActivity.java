@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yundin.androidptz.R;
@@ -13,6 +14,7 @@ import com.yundin.androidptz.model.SpOnvifDevice;
 import com.yundin.androidptz.onvif.DevicePreset;
 import com.yundin.androidptz.onvif.OnvifDevice;
 import com.yundin.androidptz.onvif.OnvifExecutor;
+import com.yundin.androidptz.onvif.OnvifResponse;
 import com.yundin.androidptz.onvif.request.ContinuousMoveRequest;
 import com.yundin.androidptz.onvif.request.GetCapabilitiesRequest;
 import com.yundin.androidptz.onvif.request.GetPresetsRequest;
@@ -55,22 +57,26 @@ public class DeviceActivity extends AppCompatActivity {
         OnvifExecutor.getDeviceCapabilities(device);
         OnvifExecutor.requestCallback = new RequestCallback() {
             @Override
-            public void onResponse(OnvifRequest request, String body) {
-                if (request instanceof GetCapabilitiesRequest) {
-                    OnvifExecutor.getProfiles(device);
-                } else if (request instanceof GetProfilesRequest) {
-                    OnvifExecutor.getPresets(device);
-                } else if (request instanceof GetPresetsRequest) {
-                    ArrayList<DevicePreset> presets = parsePresets(body);
-                    runOnUiThread(() -> presetsAdapter.replacePresets(presets));
-                } else if (request instanceof SetPresetRequest) {
-                    OnvifExecutor.getPresets(device);
+            public void onResponse(OnvifRequest request, OnvifResponse response) {
+                if (response.code == 200) {
+                    if (request instanceof GetCapabilitiesRequest) {
+                        OnvifExecutor.getProfiles(device);
+                    } else if (request instanceof GetProfilesRequest) {
+                        OnvifExecutor.getPresets(device);
+                    } else if (request instanceof GetPresetsRequest) {
+                        ArrayList<DevicePreset> presets = parsePresets(response.body);
+                        runOnUiThread(() -> presetsAdapter.replacePresets(presets));
+                    } else if (request instanceof SetPresetRequest) {
+                        OnvifExecutor.getPresets(device);
+                    }
+                } else {
+                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), response.status, Toast.LENGTH_SHORT).show());
                 }
             }
 
             @Override
             public void onFailure(OnvifRequest request, IOException e) {
-
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show());
             }
         };
 
