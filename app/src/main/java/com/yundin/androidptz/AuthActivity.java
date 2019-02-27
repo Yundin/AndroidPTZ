@@ -21,13 +21,25 @@ public class AuthActivity extends AppCompatActivity {
         EditText passwordEditText = findViewById(R.id.password);
         Button authButton = findViewById(R.id.auth_button);
 
+        SharedPreferences sp = getSharedPreferences("authData", MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sp.edit();
+
+        String login = sp.getString("login", "");
+        String password = sp.getString("password", "");
+        if(!login.equals("")){
+            loginEditText.setText(login);
+        }
+        if(!password.equals("")){
+            passwordEditText.setText(password);
+        }
+
         authButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String login = loginEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                SharedPreferences sp = getSharedPreferences("authData", MODE_PRIVATE);
-                SharedPreferences.Editor spEditor = sp.edit();
+
                 spEditor.putString("login", login);
                 spEditor.putString("password", password);
 
