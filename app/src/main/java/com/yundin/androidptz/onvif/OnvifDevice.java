@@ -3,22 +3,30 @@ package com.yundin.androidptz.onvif;
 import android.util.Base64;
 
 import com.google.common.hash.Hashing;
+import com.yundin.androidptz.onvif.request.RequestType;
 
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
 public class OnvifDevice {
 
     public String hostName;
-    public String PTZAddress = "/onvif/device_service";
+    public HashMap<RequestType, String> path = new HashMap<>();
     public String authorizationHeader;
+    public List<String> profiles = new ArrayList<>();
 
     public OnvifDevice(String hostName, String login, String password) {
         this.hostName = hostName;
         authorizationHeader = getAuthorizationHeader(login, password);
+        for (RequestType type: RequestType.values()) {
+            path.put(type, "/onvif/device_service");
+        }
     }
 
     private String getAuthorizationHeader(String login, String password) {
