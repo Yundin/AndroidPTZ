@@ -13,6 +13,7 @@ import java.util.Random;
 public class OnvifDevice {
 
     public String hostName;
+    public String PTZAddress = "/onvif/device_service";
     public String authorizationHeader;
 
     public OnvifDevice(String hostName, String login, String password) {

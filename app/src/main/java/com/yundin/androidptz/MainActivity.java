@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.yundin.androidptz.onvif.OnvifDevice;
 import com.yundin.androidptz.onvif.OnvifExecutor;
-import com.yundin.androidptz.onvif.request.ContinuousMoveRequest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
 //        device.setUsername("student");
 //        device.setPassword("student");
         OnvifDevice device = new OnvifDevice("http://192.168.15.43:80", "admin", "Supervisor");
-        OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(0, 0, 0));
+        OnvifExecutor.getDeviceCapabilities(device);
+//        OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(0, 0, 0, "protoken_1"));
 
 
 //        JoystickView v = findViewById(R.id.joystick);
