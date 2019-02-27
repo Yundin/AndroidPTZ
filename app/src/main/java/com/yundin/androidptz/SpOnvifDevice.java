@@ -1,6 +1,8 @@
 package com.yundin.androidptz;
 
-public class SpOnvifDevice {
+import java.io.Serializable;
+
+public class SpOnvifDevice implements Serializable {
     public String login;
     public String password;
     public String address;

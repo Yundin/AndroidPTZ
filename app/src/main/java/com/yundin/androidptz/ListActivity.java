@@ -8,7 +8,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -26,8 +26,10 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
-        adapter = new DeviceListAdapter(name -> {
-            // TODO
+        adapter = new DeviceListAdapter(device -> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("device", device);
+            startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
@@ -46,11 +48,16 @@ public class ListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        String devices = sp.getString("devices", "");
-        List<SpOnvifDevice> deviceList = gson.fromJson(devices, new TypeToken<List<SpOnvifDevice>>(){}.getType());
+        adapter.replaceDevices(getDevices());
+    }
 
+    private ArrayList<SpOnvifDevice> getDevices() {
+        String devices = sp.getString("devices", "");
+        ArrayList<SpOnvifDevice> deviceList = gson.fromJson(devices, new TypeToken<ArrayList<SpOnvifDevice>>(){}.getType());
         if (deviceList != null) {
-            adapter.replaceDevices(deviceList);
+            return deviceList;
+        } else {
+            return new ArrayList<>();
         }
     }
 }

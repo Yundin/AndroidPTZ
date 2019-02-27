@@ -1,18 +1,16 @@
 package com.yundin.androidptz.onvif.request;
 
 
-import com.yundin.androidptz.onvif.OnvifDevice;
-
 public final class ContinuousMoveRequest implements OnvifRequest {
 
     private float x, y, z;
     private String profileToken;
 
-    public ContinuousMoveRequest(float x, float y, float z, OnvifDevice device) {
+    public ContinuousMoveRequest(float x, float y, float z, String profileToken) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.profileToken = device.profiles.get(0);
+        this.profileToken = profileToken;
     }
 
     @Override

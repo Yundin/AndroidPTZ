@@ -78,14 +78,19 @@ public class OnvifExecutor {
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) {
-                        if (request instanceof GetCapabilitiesRequest) {
-                            deserializeCapabilities(device, response);
-                        } else if (request instanceof GetProfilesRequest) {
-                            deserializeProfiles(device, response);
-                        }
-                        if (requestCallback != null) {
-                            requestCallback.onResponse(request, response);
-                        }
+                        try {
+                            assert response.body() != null;
+                            String body = response.body().string();
+
+                            if (request instanceof GetCapabilitiesRequest) {
+                                deserializeCapabilities(device, body);
+                            } else if (request instanceof GetProfilesRequest) {
+                                deserializeProfiles(device, body);
+                            }
+                            if (requestCallback != null) {
+                                requestCallback.onResponse(request, response);
+                            }
+                        } catch (IOException e) { /**/ }
                     }
                 });
     }
@@ -94,14 +99,13 @@ public class OnvifExecutor {
         return device.hostName + device.path.get(request.getType());
     }
 
-    private static void deserializeCapabilities(OnvifDevice device, Response response) {
+    private static void deserializeCapabilities(OnvifDevice device, String body) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
-            assert response.body() != null;
-            xpp.setInput(new StringReader(response.body().string()));
+            xpp.setInput(new StringReader(body));
             int eventType = xpp.getEventType();
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG && xpp.getName().equalsIgnoreCase("ptz")) {
@@ -123,14 +127,13 @@ public class OnvifExecutor {
         } catch (Exception e) { /**/ }
     }
 
-    private static void deserializeProfiles(OnvifDevice device, Response response) {
+    private static void deserializeProfiles(OnvifDevice device, String body) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
-            assert response.body() != null;
-            xpp.setInput(new StringReader(response.body().string()));
+            xpp.setInput(new StringReader(body));
             int eventType = xpp.getEventType();
 
             device.profiles.clear();

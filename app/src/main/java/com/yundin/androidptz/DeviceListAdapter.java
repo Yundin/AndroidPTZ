@@ -35,7 +35,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         holder.name.setText(item.address);
         holder.address.setText(item.address);
 
-        holder.itemView.setOnClickListener(v -> listener.onClick(item.address));
+        holder.itemView.setOnClickListener(v -> listener.onClick(item));
     }
 
     @Override
@@ -63,6 +63,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     }
 
     interface DeviceClickListener {
-        void onClick(String name);
+        void onClick(SpOnvifDevice device);
     }
 }
