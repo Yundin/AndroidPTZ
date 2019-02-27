@@ -1,4 +1,4 @@
-package com.yundin.androidptz;
+package com.yundin.androidptz.model;
 
 import java.io.Serializable;
 

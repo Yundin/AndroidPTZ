@@ -1,9 +1,12 @@
-package com.yundin.androidptz;
+package com.yundin.androidptz.device_list;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.yundin.androidptz.R;
+import com.yundin.androidptz.model.SpOnvifDevice;
 
 import java.util.ArrayList;
 import java.util.Collection;

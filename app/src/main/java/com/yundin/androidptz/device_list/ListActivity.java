@@ -1,4 +1,4 @@
-package com.yundin.androidptz;
+package com.yundin.androidptz.device_list;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yundin.androidptz.R;
+import com.yundin.androidptz.device.DeviceActivity;
+import com.yundin.androidptz.model.SpOnvifDevice;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ public class ListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
         adapter = new DeviceListAdapter(device -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DeviceActivity.class);
             intent.putExtra("device", device);
             startActivity(intent);
         });

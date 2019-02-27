@@ -1,4 +1,4 @@
-package com.yundin.androidptz;
+package com.yundin.androidptz.device;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.yundin.androidptz.R;
+import com.yundin.androidptz.model.SpOnvifDevice;
 import com.yundin.androidptz.onvif.DevicePreset;
 import com.yundin.androidptz.onvif.OnvifDevice;
 import com.yundin.androidptz.onvif.OnvifExecutor;
@@ -15,6 +17,7 @@ import com.yundin.androidptz.onvif.request.GetPresetsRequest;
 import com.yundin.androidptz.onvif.request.GetProfilesRequest;
 import com.yundin.androidptz.onvif.request.OnvifRequest;
 import com.yundin.androidptz.onvif.request.RequestCallback;
+import com.yundin.androidptz.utils.StartPointSeekBar;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -28,7 +31,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 
-public class MainActivity extends AppCompatActivity {
+public class DeviceActivity extends AppCompatActivity {
 
     private OnvifDevice device;
 

@@ -1,4 +1,4 @@
-package com.yundin.androidptz;
+package com.yundin.androidptz.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,7 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import java.math.BigDecimal;
+import com.yundin.androidptz.R;
 
 /**
  * Created by vashisthg on 01/04/14.
