@@ -89,15 +89,20 @@ public class OnvifExecutor {
                             assert response.body() != null;
                             String body = response.body().string();
 
-                            if (request instanceof GetCapabilitiesRequest) {
-                                deserializeCapabilities(device, body);
-                            } else if (request instanceof GetProfilesRequest) {
-                                deserializeProfiles(device, body);
+                            if (response.code() == 200) {
+                                if (request instanceof GetCapabilitiesRequest) {
+                                    deserializeCapabilities(device, body);
+                                } else if (request instanceof GetProfilesRequest) {
+                                    deserializeProfiles(device, body);
+                                }
                             }
+
                             if (requestCallback != null) {
-                                requestCallback.onResponse(request, body);
+                                OnvifResponse onvifResponse = new OnvifResponse(response.code(), body, response.message());
+                                requestCallback.onResponse(request, onvifResponse);
                             }
                         } catch (IOException e) { /**/ }
+
                     }
                 });
     }
