@@ -51,6 +51,11 @@ public class PresetsAdapter extends RecyclerView.Adapter<PresetsAdapter.PresetVi
         notifyDataSetChanged();
     }
 
+    void addPreset(DevicePreset preset) {
+        data.add(preset);
+        notifyItemInserted(data.size() - 1);
+    }
+
     class PresetViewHolder extends RecyclerView.ViewHolder {
         TextView name;
 
