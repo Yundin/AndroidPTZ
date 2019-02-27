@@ -73,7 +73,7 @@ public class ListActivity extends AppCompatActivity {
         Gson gson = new Gson();
         SpOnvifDevice deviceArray[] = gson.fromJson(devices, SpOnvifDevice[].class);
         List<SpOnvifDevice> deviceList = new ArrayList<SpOnvifDevice>(Arrays.asList(deviceArray));
-        deviceList.remove(indexOfDeviceByName(deviceList, device.name));
+        deviceList.remove(indexOfDeviceByName(deviceList, device));
         adapter.replaceDevices(deviceList);
         setDevicesToSp(sp, deviceList);
 
@@ -87,9 +87,9 @@ public class ListActivity extends AppCompatActivity {
         spEditor.apply();
     }
 
-    private int indexOfDeviceByName(List<SpOnvifDevice> deviceList, String name){
+    private int indexOfDeviceByName(List<SpOnvifDevice> deviceList, SpOnvifDevice spDevice){
         for(SpOnvifDevice device : deviceList){
-            if(Objects.equals(device.name, name)) return deviceList.indexOf(device);
+            if(Objects.equals(device, spDevice)) return deviceList.indexOf(device);
         }
         return -1;
     }
