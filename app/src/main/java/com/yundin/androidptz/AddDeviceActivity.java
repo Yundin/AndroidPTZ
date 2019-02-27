@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,27 +48,39 @@ public class AddDeviceActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String address = addressEditText.getText().toString();
 
-                SharedPreferences sp = getSharedPreferences("deviceData", MODE_PRIVATE);
-                SharedPreferences.Editor spEditor = sp.edit();
+                saveData(login, password, address);
 
-                String devices = sp.getString("devices", "");
-                if(!devices.equals("")){
-                    Gson gson = new Gson();
-                    SpOnvifDevice deviceArray[] = gson.fromJson(devices, SpOnvifDevice[].class);
-                    List<SpOnvifDevice> deviceList = new ArrayList<SpOnvifDevice>(Arrays.asList(deviceArray));
-                    deviceList.add(new SpOnvifDevice(login, password, address));
-                    String deviceListJsonString = gson.toJson(deviceList);
-                    spEditor.putString("devices", deviceListJsonString);
-                }else{
-                    List<SpOnvifDevice> deviceList = new ArrayList<SpOnvifDevice>();
-                    deviceList.add(new SpOnvifDevice(login, password, address));
-                    Gson gson = new Gson();
-                    String deviceListJsonString = gson.toJson(deviceList);
-                    spEditor.putString("devices", deviceListJsonString);
-                }
-                spEditor.apply();
                 finish();
             }
         });
+    }
+
+    private void saveData(String login, String password, String address){
+        SharedPreferences sp = getSharedPreferences("deviceData", MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sp.edit();
+
+        List<SpOnvifDevice> deviceList = getDevicesFromSP(sp);
+        if(!deviceList.isEmpty()){
+            deviceList.add(new SpOnvifDevice(login, password, address));
+            setDevicesToSp(spEditor, deviceList);
+        }else{
+            deviceList.add(new SpOnvifDevice(login, password, address));
+            setDevicesToSp(spEditor, deviceList);
+        }
+    }
+
+    private List<SpOnvifDevice> getDevicesFromSP(SharedPreferences sp){
+        String devices = sp.getString("devices", "");
+        if(devices.equals("")) return new ArrayList<SpOnvifDevice>();;
+        Gson gson = new Gson();
+        SpOnvifDevice deviceArray[] = gson.fromJson(devices, SpOnvifDevice[].class);
+        return new ArrayList<SpOnvifDevice>(Arrays.asList(deviceArray));
+    }
+
+    private void setDevicesToSp(SharedPreferences.Editor spEditor, List<SpOnvifDevice> deviceList){
+        Gson gson = new Gson();
+        String deviceListJsonString = gson.toJson(deviceList);
+        spEditor.putString("devices", deviceListJsonString);
+        spEditor.apply();
     }
 }
