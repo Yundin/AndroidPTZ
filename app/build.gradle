@@ -47,6 +47,9 @@ dependencies {
 
     // hashing
     api 'com.google.guava:guava:27.0.1-android'
+
+    // deserialization
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 repositories {
     mavenCentral()
