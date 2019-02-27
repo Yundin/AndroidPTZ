@@ -16,6 +16,7 @@ import com.yundin.androidptz.onvif.request.ContinuousMoveRequest;
 import com.yundin.androidptz.onvif.request.GetCapabilitiesRequest;
 import com.yundin.androidptz.onvif.request.GetPresetsRequest;
 import com.yundin.androidptz.onvif.request.GetProfilesRequest;
+import com.yundin.androidptz.onvif.request.GotoPresetRequest;
 import com.yundin.androidptz.onvif.request.OnvifRequest;
 import com.yundin.androidptz.onvif.request.RequestCallback;
 import com.yundin.androidptz.utils.StartPointSeekBar;
@@ -146,7 +147,7 @@ public class DeviceActivity extends AppCompatActivity {
         presetsAdapter = new PresetsAdapter(new PresetsAdapter.OnPresetClickListener() {
             @Override
             public void onClick(DevicePreset preset) {
-                // TODO
+                OnvifExecutor.sendRequest(device, new GotoPresetRequest(device.profiles.get(0), preset.getToken()));
             }
         });
         RecyclerView recyclerView = findViewById(R.id.recycler);
