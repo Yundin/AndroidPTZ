@@ -2,12 +2,12 @@ package com.yundin.androidptz.device;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
-import com.google.gson.Gson;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yundin.androidptz.R;
 import com.yundin.androidptz.model.SpOnvifDevice;
 import com.yundin.androidptz.onvif.DevicePreset;
@@ -17,8 +17,10 @@ import com.yundin.androidptz.onvif.request.ContinuousMoveRequest;
 import com.yundin.androidptz.onvif.request.GetCapabilitiesRequest;
 import com.yundin.androidptz.onvif.request.GetPresetsRequest;
 import com.yundin.androidptz.onvif.request.GetProfilesRequest;
+import com.yundin.androidptz.onvif.request.GotoPresetRequest;
 import com.yundin.androidptz.onvif.request.OnvifRequest;
 import com.yundin.androidptz.onvif.request.RequestCallback;
+import com.yundin.androidptz.onvif.request.SetPresetRequest;
 import com.yundin.androidptz.utils.StartPointSeekBar;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -27,10 +29,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -38,11 +40,12 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class DeviceActivity extends AppCompatActivity {
 
     private OnvifDevice device;
+    private PresetsAdapter presetsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_device);
         OnvifExecutor.loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         Intent intent = getIntent();
@@ -59,6 +62,9 @@ public class DeviceActivity extends AppCompatActivity {
                     OnvifExecutor.getPresets(device);
                 } else if (request instanceof GetPresetsRequest) {
                     ArrayList<DevicePreset> presets = parsePresets(body);
+                    runOnUiThread(() -> presetsAdapter.replacePresets(presets));
+                } else if (request instanceof SetPresetRequest) {
+                    OnvifExecutor.getPresets(device);
                 }
             }
 
@@ -70,6 +76,7 @@ public class DeviceActivity extends AppCompatActivity {
 
         configureJoystick();
         configureSeekBar();
+        configurePresets();
     }
 
     private ArrayList<DevicePreset> parsePresets(String responseBody) {
@@ -136,6 +143,36 @@ public class DeviceActivity extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+    }
+
+    private void configurePresets() {
+        presetsAdapter = new PresetsAdapter(new PresetsAdapter.OnPresetClickListener() {
+            @Override
+            public void onClick(DevicePreset preset) {
+                OnvifExecutor.sendRequest(device, new GotoPresetRequest(device.profiles.get(0), preset.getToken()));
+            }
+        });
+        RecyclerView recyclerView = findViewById(R.id.recycler);
+        recyclerView.setAdapter(presetsAdapter);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(DeviceActivity.this);
+                alert.setTitle("Add preset");
+                alert.setMessage("Input preset name");
+
+                final EditText input = new EditText(DeviceActivity.this);
+                alert.setView(input);
+                alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+                    String name = input.getText().toString();
+                    OnvifExecutor.sendRequest(device, new SetPresetRequest(device.profiles.get(0), name));
+                });
+                alert.setNegativeButton("Cancel", (dialog, whichButton) -> {});
+                alert.show();
             }
         });
     }
