@@ -1,8 +1,10 @@
 package com.yundin.androidptz;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,6 +31,12 @@ public class ListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         sp = getSharedPreferences("deviceData", MODE_PRIVATE);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), AddDeviceActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -38,6 +46,8 @@ public class ListActivity extends AppCompatActivity {
         String devices = sp.getString("devices", "");
         List<SpOnvifDevice> deviceList = gson.fromJson(devices, new TypeToken<List<SpOnvifDevice>>(){}.getType());
 
-        adapter.replaceDevices(deviceList);
+        if (deviceList != null) {
+            adapter.replaceDevices(deviceList);
+        }
     }
 }
