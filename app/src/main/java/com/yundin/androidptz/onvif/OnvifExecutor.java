@@ -1,6 +1,7 @@
 package com.yundin.androidptz.onvif;
 
 import com.yundin.androidptz.onvif.request.GetCapabilitiesRequest;
+import com.yundin.androidptz.onvif.request.GetPresetsRequest;
 import com.yundin.androidptz.onvif.request.GetProfilesRequest;
 import com.yundin.androidptz.onvif.request.OnvifRequest;
 import com.yundin.androidptz.onvif.request.RequestCallback;
@@ -58,6 +59,12 @@ public class OnvifExecutor {
         sendRequest(device, new GetProfilesRequest());
     }
 
+    public static void getPresets(OnvifDevice device) {
+        if (!device.profiles.isEmpty()) {
+            sendRequest(device, new GetPresetsRequest(device.profiles.get(0)));
+        }
+    }
+
     public static void sendRequest(OnvifDevice device, OnvifRequest request) {
         RequestBody requestBody = RequestBody.create(reqBodyType, SOAP_BEGIN + device.authorizationHeader + SOAP_BODY_BEGIN + request.getXml() + SOAP_END);
 
@@ -88,7 +95,7 @@ public class OnvifExecutor {
                                 deserializeProfiles(device, body);
                             }
                             if (requestCallback != null) {
-                                requestCallback.onResponse(request, response);
+                                requestCallback.onResponse(request, body);
                             }
                         } catch (IOException e) { /**/ }
                     }

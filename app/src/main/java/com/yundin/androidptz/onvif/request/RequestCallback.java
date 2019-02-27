@@ -2,11 +2,9 @@ package com.yundin.androidptz.onvif.request;
 
 import java.io.IOException;
 
-import okhttp3.Response;
-
 public interface RequestCallback {
 
-    void onResponse(OnvifRequest request, Response response);
+    void onResponse(OnvifRequest request, String body);
 
     void onFailure(OnvifRequest request, IOException e);
 }
