@@ -10,6 +10,8 @@ import com.yundin.androidptz.onvif.OnvifExecutor;
 import com.yundin.androidptz.onvif.request.ContinuousMoveRequest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        OnvifExecutor.loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         final StartPointSeekBar seekBar = (StartPointSeekBar) findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(new StartPointSeekBar.OnSeekBarChangeListener() {
@@ -55,18 +58,20 @@ public class MainActivity extends AppCompatActivity {
 //        device.setUsername("student");
 //        device.setPassword("student");
         OnvifDevice device = new OnvifDevice("http://192.168.15.43:80", "admin", "Supervisor");
-        OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(0, 0, 0));
+        OnvifExecutor.getDeviceCapabilities(device);
+        OnvifExecutor.getProfiles(device);
+//        OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(0, 0, 0, "protoken_1"));
 
 
-//        JoystickView v = findViewById(R.id.joystick);
-//        v.setOnMoveListener(new JoystickView.OnMoveListener() {
-//            @Override
-//            public void onMove(int angle, int strength) {
-//                float x = (float) Math.cos(Math.toRadians(angle)) * strength / 100f;
-//                float y = (float) Math.sin(Math.toRadians(angle)) * strength / 100f;
-//                onvifManager.sendOnvifRequest(device, new ContinuousMoveRequest(x, y, 0));
-//            }
-//        }, 500);
+        JoystickView v = findViewById(R.id.joystick);
+        v.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                float x = (float) Math.cos(Math.toRadians(angle)) * strength / 100f;
+                float y = (float) Math.sin(Math.toRadians(angle)) * strength / 100f;
+                OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(x, y, 0, device));
+            }
+        }, 500);
 //
 //        // force logging
 //        Field f;
