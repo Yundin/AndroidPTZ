@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ListActivity extends AppCompatActivity {
@@ -29,6 +30,8 @@ public class ListActivity extends AppCompatActivity {
             // TODO
         });
         recyclerView.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         sp = getSharedPreferences("deviceData", MODE_PRIVATE);
 
