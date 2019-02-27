@@ -40,7 +40,7 @@ public class OnvifExecutor {
 
     private final static String SOAP_END = "</soap:Body></soap:Envelope>";
 
-    private static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    public static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
     private static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10000, TimeUnit.SECONDS)
             .writeTimeout(100, TimeUnit.SECONDS)
