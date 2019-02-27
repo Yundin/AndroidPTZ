@@ -29,11 +29,9 @@ public class OnvifDevice {
         }
         String slashNNonce = Base64.encodeToString(nonceSB.toString().getBytes(), Base64.DEFAULT);
         String nonce = slashNNonce.substring(0, slashNNonce.length() - 1);
-        nonce = "ZjAzNjUxZDhiNmM4OTBlMzM5YTUwZmU4OTZhYjQ5YjI=";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         String date = dateFormat.format(new Date());
-        date = "2019-02-26T19:38:37.066480Z";
 
         String decodedNonce = new String(Base64.decode(nonce.getBytes(), Base64.DEFAULT));
 
