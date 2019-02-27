@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yundin.androidptz.R;
 import com.yundin.androidptz.model.SpOnvifDevice;
 import com.yundin.androidptz.onvif.DevicePreset;
@@ -27,6 +28,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -34,11 +36,12 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class DeviceActivity extends AppCompatActivity {
 
     private OnvifDevice device;
+    private PresetsAdapter presetsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_device);
         OnvifExecutor.loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         Intent intent = getIntent();
@@ -55,6 +58,8 @@ public class DeviceActivity extends AppCompatActivity {
                     OnvifExecutor.getPresets(device);
                 } else if (request instanceof GetPresetsRequest) {
                     ArrayList<DevicePreset> presets = parsePresets(body);
+                    runOnUiThread(() -> presetsAdapter.replacePresets(presets));
+
                 }
             }
 
@@ -66,6 +71,7 @@ public class DeviceActivity extends AppCompatActivity {
 
         configureJoystick();
         configureSeekBar();
+        configurePresets();
     }
 
     private ArrayList<DevicePreset> parsePresets(String responseBody) {
@@ -132,6 +138,25 @@ public class DeviceActivity extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+    }
+
+    private void configurePresets() {
+        presetsAdapter = new PresetsAdapter(new PresetsAdapter.OnPresetClickListener() {
+            @Override
+            public void onClick(DevicePreset preset) {
+                // TODO
+            }
+        });
+        RecyclerView recyclerView = findViewById(R.id.recycler);
+        recyclerView.setAdapter(presetsAdapter);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
             }
         });
     }
