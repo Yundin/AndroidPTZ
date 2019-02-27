@@ -1,14 +1,13 @@
 package com.yundin.androidptz;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AuthActivity extends AppCompatActivity {
 
@@ -17,12 +16,12 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        SharedPreferences sp = getSharedPreferences("authData", MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sp.edit();
+
         EditText loginEditText = findViewById(R.id.login);
         EditText passwordEditText = findViewById(R.id.password);
         Button authButton = findViewById(R.id.auth_button);
-
-        SharedPreferences sp = getSharedPreferences("authData", MODE_PRIVATE);
-        SharedPreferences.Editor spEditor = sp.edit();
 
         String login = sp.getString("login", "");
         String password = sp.getString("password", "");
@@ -44,7 +43,7 @@ public class AuthActivity extends AppCompatActivity {
                 spEditor.putString("password", password);
 
                 spEditor.apply();
-                Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                Intent intent = new Intent(AuthActivity.this, ListActivity.class);
                 startActivity(intent);
                 finish();
             }

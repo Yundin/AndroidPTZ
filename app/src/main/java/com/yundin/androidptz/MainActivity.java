@@ -1,7 +1,6 @@
 package com.yundin.androidptz;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,24 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         OnvifExecutor.loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        final StartPointSeekBar seekBar = (StartPointSeekBar) findViewById(R.id.seek_bar);
-        seekBar.setOnSeekBarChangeListener(new StartPointSeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onOnSeekBarValueChange(StartPointSeekBar bar, double value) {
-                Log.d("LOGTA1", "seekbar value:" + value);
-            }
-        });
-        seekBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    seekBar.setProgress(0);
-                    return true;
-                }
-
-                return false;
-            }
-        });
 //        OnvifManager onvifManager = new OnvifManager();
 //        onvifManager.setOnvifResponseListener(new OnvifResponseListener() {
 //            @Override
@@ -72,6 +53,27 @@ public class MainActivity extends AppCompatActivity {
                 OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(x, y, 0, device));
             }
         }, 500);
+
+
+        final StartPointSeekBar seekBar = (StartPointSeekBar) findViewById(R.id.seek_bar);
+        seekBar.setProgress(0);
+        seekBar.setOnSeekBarChangeListener(new StartPointSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onOnSeekBarValueChange(StartPointSeekBar bar, double value) {
+                OnvifExecutor.sendRequest(device, new ContinuousMoveRequest(0, 0, (float) value, device));
+            }
+        });
+        seekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    seekBar.setProgress(0);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 //
 //        // force logging
 //        Field f;
