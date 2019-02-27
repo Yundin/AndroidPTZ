@@ -48,10 +48,14 @@ public class AddDeviceActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String name = nameEditText.getText().toString();
                 String address = addressEditText.getText().toString();
+                if(name.equals("")) name = address;
+                if(address.matches("http(s)?://([\\w-]+\\.)+[\\w-]+(:\\d+)?(/[\\w- ;,./?%&=]*)?")){
+                    saveData(login, password, name, address);
+                    finish();
+                }else {
+                    addressEditText.setError("Неверный адрес");
+                }
 
-                saveData(login, password, name, address);
-
-                finish();
             }
         });
     }
