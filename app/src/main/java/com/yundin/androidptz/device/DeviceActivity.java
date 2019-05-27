@@ -54,6 +54,7 @@ public class DeviceActivity extends AppCompatActivity {
         SpOnvifDevice spOnvifDevice = (SpOnvifDevice) intent.getSerializableExtra("device");
 
         device = new OnvifDevice(spOnvifDevice.address, spOnvifDevice.login, spOnvifDevice.password);
+        Toast.makeText(this, "Connecting to camera", Toast.LENGTH_SHORT).show();
         OnvifExecutor.getDeviceCapabilities(device);
         OnvifExecutor.requestCallback = new RequestCallback() {
             @Override
@@ -66,6 +67,9 @@ public class DeviceActivity extends AppCompatActivity {
                     } else if (request instanceof GetPresetsRequest) {
                         ArrayList<DevicePreset> presets = parsePresets(response.body);
                         runOnUiThread(() -> presetsAdapter.replacePresets(presets));
+                        if (presets.isEmpty()) {
+                            runOnUiThread(() -> Toast.makeText(getApplicationContext(), "No presets found on camera", Toast.LENGTH_SHORT).show());
+                        }
                     } else if (request instanceof SetPresetRequest) {
                         OnvifExecutor.getPresets(device);
                     }
@@ -76,7 +80,7 @@ public class DeviceActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(OnvifRequest request, IOException e) {
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show());
             }
         };
 
