@@ -1,8 +1,12 @@
 package com.yundin.androidptz.device_list;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,7 +34,6 @@ public class AddDeviceActivity extends AppCompatActivity {
         Button addButton = findViewById(R.id.add_button);
 
         SharedPreferences sp = getSharedPreferences("authData", MODE_PRIVATE);
-        SharedPreferences.Editor spEditor = sp.edit();
 
         String login = sp.getString("login", "");
         String password = sp.getString("password", "");
@@ -40,6 +43,17 @@ public class AddDeviceActivity extends AppCompatActivity {
         if(!password.equals("")){
             passwordEditText.setText(password);
         }
+
+        loginEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                loginEditText.setSelection(loginEditText.getText().length());
+            }
+        });
+        passwordEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                passwordEditText.setSelection(passwordEditText.getText().length());
+            }
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +66,8 @@ public class AddDeviceActivity extends AppCompatActivity {
                 if(address.matches("http(s)?://([\\w-]+\\.)+[\\w-]+(:\\d+)?(/[\\w- ;,./?%&=]*)?")){
                     saveData(login, password, name, address);
                     finish();
-                }else {
-                    addressEditText.setError("Неверный адрес");
+                } else {
+                    addressEditText.setError("Введите адрес в формате http(s)://ip:port");
                 }
 
             }
@@ -78,7 +92,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         String devices = sp.getString("devices", "");
         if(devices.equals("")) return new ArrayList<SpOnvifDevice>();
         Gson gson = new Gson();
-        SpOnvifDevice deviceArray[] = gson.fromJson(devices, SpOnvifDevice[].class);
+        SpOnvifDevice[] deviceArray = gson.fromJson(devices, SpOnvifDevice[].class);
         return new ArrayList<SpOnvifDevice>(Arrays.asList(deviceArray));
     }
 
@@ -87,5 +101,23 @@ public class AddDeviceActivity extends AppCompatActivity {
         String deviceListJsonString = gson.toJson(deviceList);
         spEditor.putString("devices", deviceListJsonString);
         spEditor.apply();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains(Math.round(ev.getRawX()), Math.round(ev.getRawY()))) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
