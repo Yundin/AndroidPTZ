@@ -4,38 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".device_list.AddDeviceActivity"
-    android:gravity="center"
+    android:gravity="top"
     android:orientation="vertical">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="name"
+        android:singleLine="true"
         android:id="@+id/name"
-        android:layout_margin="30dp"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="address"
+        android:singleLine="true"
         android:id="@+id/address"
-        android:layout_margin="30dp"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="16dp"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="login"
+        android:singleLine="true"
         android:id="@+id/login"
-        android:layout_margin="30dp"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="16dp"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="password"
+        android:singleLine="true"
+        android:inputType="textPassword"
         android:id="@+id/password"
-        android:layout_margin="20dp"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="16dp"/>
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Добавить"
         android:id="@+id/add_button"
-        android:layout_margin="30dp"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>
